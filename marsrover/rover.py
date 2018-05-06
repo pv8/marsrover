@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import math
 
 
 class Rover(object):
@@ -41,6 +42,20 @@ class Rover(object):
 
     def turn_right(self):
         self._rotate(-90)
+
+    def is_inside_boundaries(self, new_x, new_y):
+        inside_limit_x = 0 <= new_x <= self._boundaries[0]
+        inside_limit_y = 0 <= new_y <= self._boundaries[1]
+        return inside_limit_x and inside_limit_y
+
+    def move(self):
+        new_x = self._x + round(math.cos(math.radians(self._direction_angle)))
+        new_y = self._y + round(math.sin(math.radians(self._direction_angle)))
+
+        # only move rover if it's inside the limits
+        if self.is_inside_boundaries(new_x, new_y):
+            self._x = new_x
+            self._y = new_y
 
     def __repr__(self):
         return f'{self.name} ({self._x}, {self._y}, {self.direction})'
