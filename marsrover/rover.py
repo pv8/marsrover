@@ -57,5 +57,14 @@ class Rover(object):
             self._x = new_x
             self._y = new_y
 
+    def execute_instructions(self, instructions):
+        for command in instructions:
+            if command == 'L':
+                self.turn_left()
+            elif command == 'R':
+                self.turn_right()
+            elif command == 'M':
+                self.move()
+
     def __repr__(self):
         return f'{self.name} ({self._x}, {self._y}, {self.direction})'

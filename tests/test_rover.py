@@ -80,3 +80,16 @@ def test_try_move_out_of_bounds(rover):
     assert rover.current_position == 'RoverX:8 13 N'
     rover.move()
     assert rover.current_position == 'RoverX:8 13 N'
+
+
+def test_execute_instructions(rover):
+    rover.execute_instructions('LMMLMMMMR')
+    assert rover.current_position == 'RoverX:1 1 W'
+
+    rover.execute_instructions('RMMMRMMMLMMMMRMMMML')
+    assert rover.current_position == 'RoverX:8 8 N'
+
+
+def test_try_execute_unrecognized_instructions(rover):
+    rover.execute_instructions('ABCDEFGHIJKNOPQSTUVWXYZ0123456789')
+    assert rover.current_position == 'RoverX:3 5 N'
