@@ -67,4 +67,4 @@ class Rover(object):
                 self.move()
 
     def __repr__(self):
-        return f'{self.name} ({self._x}, {self._y}, {self.direction})'
+        return self.current_position

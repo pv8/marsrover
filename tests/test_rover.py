@@ -12,7 +12,7 @@ def rover():
 
 
 def test_rover_str(rover):
-    assert str(rover) == 'RoverX (3, 5, N)'
+    assert str(rover) == 'RoverX:3 5 N'
 
 
 def test_rover_current_position(rover):
