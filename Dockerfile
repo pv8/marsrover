@@ -3,4 +3,4 @@ LABEL maintainer="Pablo Vieira <povieira@gmail.com>"
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 COPY . /app
-RUN pip install -e . && pip install -r requirements_dev.txt
+RUN pip install -r requirements_dev.txt && pip install -e .

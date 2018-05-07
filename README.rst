@@ -38,6 +38,18 @@ The instructions can be in a file (i.e. ``input.txt``) and its content redirect 
 
     $ cat input.txt | rover
 
+With Docker_, build the image:
+
+.. code-block:: bash
+
+    $ docker build -t rover .
+
+And run with helper script ``run.sh``:
+
+.. code-block:: bash
+
+    $ ./run.sh rover < input.txt
+
 
 
 Development environment
