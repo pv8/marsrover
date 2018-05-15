@@ -1,5 +1,5 @@
 ==========
-mars-rover
+Mars Rover
 ==========
 
 
@@ -11,8 +11,8 @@ Quick start
 
 .. code-block:: bash
 
-    $ git clone https://github.com/pv8/mars-rover
-    $ cd mars-rover
+    $ git clone https://github.com/pv8/marsrover
+    $ cd marsrover
     $ pip install .
     $ rover
 
