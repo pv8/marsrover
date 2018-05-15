@@ -4,13 +4,14 @@ from collections import OrderedDict
 import fileinput
 
 from marsrover import utils
-from .rover import Rover
+from .rover import Rover, Plateau
 
 
 def main():
     fi = fileinput.FileInput()
     boundaries = utils.parse_plateau(fi.readline())
-    rovers = OrderedDict()
+    plateau = Plateau(boundaries)
+    results = OrderedDict()
     errors_count = 0
     for line in fi:
         if not line.strip():
@@ -18,17 +19,23 @@ def main():
         rover_data = utils.parse_rover_data(line.strip())
         if len(rover_data) == 4:  # Landing
             name, x, y, direction = rover_data
-            rovers[name] = Rover(name=name, initial_position=(int(x), int(y), direction),
-                                 boundaries=boundaries)
+            rover = Rover(name=name, initial_position=(int(x), int(y), direction))
+            plateau.deploy_rover(rover)
+            if not plateau.get_rover(name):
+                results[f'E{errors_count}'] = (
+                    f'[ERROR] Rover <{name}> cannot be deployed on ({x}, {y})!'
+                )
+            else:
+                results[name] = rover
         elif len(rover_data) == 2:  # Instructions
             name, instructions = rover_data
-            rover = rovers.get(name)
+            rover = plateau.get_rover(name)
             if rover:
                 rover.execute_instructions(instructions)
             else:
-                rovers[f'E{errors_count}'] = f'[ERROR] Rover <{name}> has not been deployed yet!'
+                results[f'E{errors_count}'] = f'[ERROR] Rover <{name}> has not been deployed yet!'
 
-    for rover in rovers.values():
+    for rover in results.values():
         print(rover)
 
 

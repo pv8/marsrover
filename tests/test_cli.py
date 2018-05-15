@@ -10,6 +10,9 @@ from marsrover.cli import main
 
 
 class MockFileInputBase(object):
+    def __init__(self):
+        self.input_data = None
+
     def __next__(self):
         if len(self.input_data) == 0:
             raise StopIteration
@@ -34,6 +37,7 @@ def assert_mock_input(mock_class, expected_output):
 def test_cli_default_input():
     class MockFileInput(MockFileInputBase):
         def __init__(self):
+            super().__init__()
             self.input_data = [
                 'Plateau:5 5',
                 'Rover1 Landing:1 2 N',
@@ -41,7 +45,6 @@ def test_cli_default_input():
                 'Rover2 Landing:3 3 E',
                 'Rover2 Instructions:MMRMMRMRRM',
             ]
-            super().__init__()
 
     expected_output = (
         'Rover1:1 3 N\n'
@@ -54,6 +57,7 @@ def test_cli_default_input():
 def test_cli_input_with_blank_line():
     class MockFileInput(MockFileInputBase):
         def __init__(self):
+            super().__init__()
             self.input_data = [
                 'Plateau:5 5',
                 'Rover1 Landing:1 2 N',
@@ -62,7 +66,6 @@ def test_cli_input_with_blank_line():
                 'Rover2 Landing:3 3 E',
                 'Rover2 Instructions:MMRMMRMRRM',
             ]
-            super().__init__()
 
     expected_output = (
         'Rover1:1 3 N\n'
@@ -74,6 +77,7 @@ def test_cli_input_with_blank_line():
 def test_cli_input_with_instructions_error():
     class MockFileInput(MockFileInputBase):
         def __init__(self):
+            super().__init__()
             self.input_data = [
                 'Plateau:5 5',
                 'Rover1 Landing:1 2 N',
@@ -82,7 +86,6 @@ def test_cli_input_with_instructions_error():
                 'Rover2 Landing:3 3 E',
                 'Rover2 Instructions:MMRMMRMRRM',
             ]
-            super().__init__()
 
     expected_output = (
         'Rover1:1 3 N\n'
@@ -90,4 +93,21 @@ def test_cli_input_with_instructions_error():
         'Rover2:5 1 E\n'
     )
 
+    assert_mock_input(MockFileInput, expected_output)
+
+
+def test_landing_rover_on_taken_position():
+    class MockFileInput(MockFileInputBase):
+        def __init__(self):
+            super().__init__()
+            self.input_data = [
+                'Plateau:5 5',
+                'Rover1 Landing:1 2 N',
+                'Rover2 Landing:1 2 E',
+            ]
+
+    expected_output = (
+        'Rover1:1 2 N\n'
+        '[ERROR] Rover <Rover2> cannot be deployed on (1, 2)!\n'
+    )
     assert_mock_input(MockFileInput, expected_output)
