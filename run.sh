@@ -4,7 +4,8 @@ set -o pipefail
 set -o nounset
 
 
-cmd="$@"
+cmd="$1"
+cmd_args="${@:2}"
 
 function print_usage() {
   echo "usage: ./run.sh <command>"
@@ -24,12 +25,12 @@ case ${cmd} in
     print_usage
     ;;
   test|tests)
-    docker run -t -v `pwd`:/app -v ~/.pdbrc.py:/root/.pdbrc.py -i --rm rover pytest -s --cov-report term-missing --cov=.
+    docker run -t -v `pwd`:/app -v ~/.pdbrc.py:/root/.pdbrc.py -i --rm rover pytest -s ${cmd_args} --cov-report term-missing --cov=. 
     ;;
   pep8|flake8)
-    docker run -t -v `pwd`:/app -v ~/.pdbrc.py:/root/.pdbrc.py -i --rm rover flake8 --statistics .
+    docker run -t -v `pwd`:/app -v ~/.pdbrc.py:/root/.pdbrc.py -i --rm rover flake8 --statistics . ${cmd_args}
     ;;
   *)
-    docker run -v `pwd`:/app -i --rm rover ${cmd}
+    docker run -v `pwd`:/app -i --rm rover ${cmd} ${cmd_args}
     ;;
 esac
